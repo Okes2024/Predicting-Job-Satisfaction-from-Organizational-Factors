@@ -1,0 +1,21 @@
+
+### 7. .gitignore
+```text
+# Data files
+data/raw/
+data/processed/
+
+# Models
+models/
+
+# Environments
+.env
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Python
+__pycache__/
+*.pyc
