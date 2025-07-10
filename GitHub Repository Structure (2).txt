@@ -1,0 +1,16 @@
+Predicting-Job-Satisfaction-from-Organizational-Factors/
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── README.md
+├── models/
+│   └── job_satisfaction_model.pkl
+├── notebooks/
+│   └── EDA_Preprocessing.ipynb
+├── src/
+│   ├── data_preprocessing.py
+│   ├── train_model.py
+│   └── predict.py
+├── requirements.txt
+├── .gitignore
+└── README.md
