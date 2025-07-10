@@ -1,0 +1,51 @@
+# src/predict.py
+import pandas as pd
+import joblib
+
+def predict_job_satisfaction(input_data):
+    """Predict job satisfaction for new data"""
+    # Load model and preprocessor
+    model = joblib.load('../models/job_satisfaction_model.pkl')
+    preprocessor = joblib.load('../models/preprocessor.pkl')
+    
+    # Ensure input data has correct columns
+    expected_cols = ['Work_Hours', 'Salary', 'Autonomy', 
+                     'Workplace_Culture', 'Management_Quality', 'Career_Growth']
+    
+    if not all(col in input_data.columns for col in expected_cols):
+        missing = set(expected_cols) - set(input_data.columns)
+        raise ValueError(f"Missing columns in input data: {missing}")
+    
+    # Preprocess input data
+    processed_data = preprocessor.transform(input_data)
+    
+    # Make prediction
+    return model.predict(processed_data)
+
+def predict_from_csv(file_path):
+    """Predict from CSV file"""
+    new_data = pd.read_csv(file_path)
+    predictions = predict_job_satisfaction(new_data)
+    new_data['Predicted_Job_Satisfaction'] = predictions
+    return new_data
+
+# Example usage
+if __name__ == "__main__":
+    # Create sample input
+    sample_data = pd.DataFrame({
+        'Work_Hours': [45, 38, 50],
+        'Salary': [75000, 85000, 60000],
+        'Autonomy': [3.5, 4.2, 2.8],
+        'Workplace_Culture': ['Supportive', 'Neutral', 'Hostile'],
+        'Management_Quality': ['Good', 'Excellent', 'Poor'],
+        'Career_Growth': ['Moderate', 'High', 'Low']
+    })
+    
+    print("Sample Predictions:")
+    predictions = predict_job_satisfaction(sample_data)
+    for i, pred in enumerate(predictions):
+        print(f"Employee {i+1}: {pred:.2f}")
+    
+    # Save sample predictions
+    sample_data['Predicted_Job_Satisfaction'] = predictions
+    sample_data.to_csv('../data/predictions/sample_predictions.csv', index=False)
